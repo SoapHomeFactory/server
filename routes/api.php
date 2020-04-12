@@ -17,3 +17,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::ApiResources([
+  'recipes' => 'Api\RecipeController',
+  'recipes.ingredients' => 'Api\IngredientController',
+  'fats' => 'Api\FatController',
+  'lyes' => 'Api\LyeController',
+  'water' => 'Api\WaterController',
+  'perfumes' => 'Api\PerfumeController'
+]);
