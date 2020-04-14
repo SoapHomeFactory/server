@@ -17,13 +17,16 @@ class RecipeTest extends TestCase
     {
         parent::setUp();
         $this->seed(DatabaseSeeder::class);
+        $this->withoutMiddleware([
+          \App\Http\Middleware\Authenticate::class
+        ]);
     }
 
     public function testgettingAllRecipes()
     {
         $recipes = factory(Recipe::class, 10)->create();
 
-        $response = $this->get('/api/recipes');
+        $response = $this->get('/recipes');
 
         $response->assertStatus(200);
         $this->assertEquals(count(json_decode($response->getContent())), 10);
@@ -33,7 +36,7 @@ class RecipeTest extends TestCase
     {
         $recipes = factory(Recipe::class, 5)->create();
 
-        $response = $this->get('/api/recipes/2');
+        $response = $this->get('/recipes/2');
 
         $response->assertStatus(200);
         $this->assertNotEmpty($response->getContent());
@@ -70,7 +73,7 @@ class RecipeTest extends TestCase
           ],
         ];
 
-        $response = $this->post('/api/recipes', $payload);
+        $response = $this->post('/recipes', $payload);
 
         $response->assertStatus(200);
 
@@ -89,7 +92,7 @@ class RecipeTest extends TestCase
     {
         $recipes = factory(Recipe::class, 2)->create();
 
-        $response = $this->delete('/api/recipes/1');
+        $response = $this->delete('/recipes/1');
 
         $response->assertStatus(200);
         $this->assertDatabaseMissing('recipes', [
